@@ -28,6 +28,6 @@
 									} ;
 							pkgs = builtins.getAttr system nixpkgs.legacyPackages ;
 							in
-								"${ application }/bin/application"
+								"${ application }/bin/application" ;
 			} ;
 }
