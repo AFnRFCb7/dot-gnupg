@@ -22,7 +22,7 @@
 												if [ ! -d "$GNUPGHOME" ]
 												then
 													mkdir --parents "$GNUPGHOME"
-													chown 0700 "$GNUPGHOME"
+													chmod 0700 "$GNUPGHOME"
 													gpg --homedir "$GNUPGHOME" --batch --yes --import-secret-keys "$( ${ secret-keys } )"
 													gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "( ${ ownertrust } )"
 													gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb
