@@ -23,7 +23,7 @@
 												then
 													mkdir --parents "$GNUPGHOME"
 													chmod 0700 "$GNUPGHOME"
-													gpg --homedir "$GNUPGHOME" --batch --yes --import-secret-keys "$( ${ secret-keys } )"
+													gpg --homedir "$GNUPGHOME" --batch --yes --import "$( ${ secret-keys } )"
 													gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "( ${ ownertrust } )"
 													gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb
 												fi
