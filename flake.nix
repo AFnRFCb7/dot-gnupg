@@ -23,9 +23,9 @@
 												then
 													mkdir --parents "$GNUPGHOME"
 													chmod 0700 "$GNUPGHOME"
-													gpg --homedir "$GNUPGHOME" --batch --yes --import "$( ${ secret-keys } )"
-													gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "( ${ ownertrust } )"
-													gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb
+													gpg --homedir "$GNUPGHOME" --batch --yes --import "$( ${ secret-keys } )" >&2
+													gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "$( ${ ownertrust } )" >&2
+													gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb >&2
 												fi
 												echo "$GNUPGHOME"
 											'' ;
