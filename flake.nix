@@ -18,7 +18,7 @@
 										runtimeInputs = [ pkgs.coreutils pkgs.gnupg ] ;
 										text =	
 											''
-												export GNUPHOME=/tmp/resources/${ builtins.hashString "sha512" ( builtins.toJSON primary ) }
+												export GNUPGHOME=/tmp/resources/${ builtins.hashString "sha512" ( builtins.toJSON primary ) }
 												mkdir --parents "$GNUPGHOME"
 												chown 07000 "$GNUPGHOME"
 												gpg --homedir "$GNUPGHOME" --batch --yes --import-secret-keys "$( ${ secret-keys } )"
