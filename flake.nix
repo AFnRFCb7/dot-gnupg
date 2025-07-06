@@ -19,11 +19,15 @@
 										text =	
 											''
 												export GNUPGHOME=/tmp/resources/${ builtins.hashString "sha512" ( builtins.toJSON primary ) }
-												mkdir --parents "$GNUPGHOME"
-												chown 07000 "$GNUPGHOME"
-												gpg --homedir "$GNUPGHOME" --batch --yes --import-secret-keys "$( ${ secret-keys } )"
-												gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "( ${ ownertrust } )"
-												gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb
+												if [ ! -d "$GNUPGHOME" ]
+												then
+													mkdir --parents "$GNUPGHOME"
+													chown 0700 "$GNUPGHOME"
+													gpg --homedir "$GNUPGHOME" --batch --yes --import-secret-keys "$( ${ secret-keys } )"
+													gpg --homedir "$GNUPGHOME" --batch --yes --import-ownertrust "( ${ ownertrust } )"
+													gpg --homedir "$GNUPGHOME" --batch --yes --update-trustdb
+												fi
+												echo "$GNUPGHOME"
 											'' ;
 									} ;
 							pkgs = builtins.getAttr system nixpkgs.legacyPackages ;
