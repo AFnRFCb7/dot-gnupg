@@ -93,7 +93,7 @@
                                                                                     ''
                                                                                         OUT="$1"
                                                                                         touch "$OUT"
-                                                                                        failure init "We expected ${ expected but we observed ${ observed }"
+                                                                                        failure init "We expected ${ expected } but we observed ${ observed }"
                                                                                     '' ;
                                                                     }
                                                             )
