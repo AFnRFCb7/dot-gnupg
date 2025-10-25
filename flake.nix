@@ -24,7 +24,7 @@
                                                                     chmod 0700 "$GNUPGHOME"
                                                                     SECRET_KEYS="${ secret-keys }"
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS" 2>&1
-                                                                    OWNERTRUST=${ ownertrust }"
+                                                                    OWNERTRUST="${ ownertrust }"
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST" 2>&1
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                 '' ;
