@@ -102,7 +102,7 @@
                                                                 writeShellApplication
                                                                     {
                                                                         name = "execute-test-targets" ;
-                                                                        runtimeInputs = [ coreutils ( failure "8eadd518" ) ] ;
+                                                                        runtimeInputs = [ coreutils ( failure.implementation "8eadd518" ) ] ;
                                                                         text =
                                                                             let
                                                                                 observed = implementation.targets ;
