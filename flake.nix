@@ -22,9 +22,9 @@
                                                                     export GNUPGHOME
                                                                     mkdir --parents "$GNUPGHOME"
                                                                     chmod 0700 "$GNUPGHOME"
-                                                                    SECRET_KEYS="$( ${ attributes.secret-keys.resource } )" || failure secret keys
+                                                                    SECRET_KEYS="$( ${ secret-keys.resource } )" || failure secret keys
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS/secret" 2>&1
-                                                                    OWNERTRUST="$( ${ attributes.ownertrust.resource } )" || failure ownertrust
+                                                                    OWNERTRUST="$( ${ ownertrust.resource } )" || failure ownertrust
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST/${ attributes.ownertrust.target }" 2>&1
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                 '' ;
