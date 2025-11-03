@@ -9,7 +9,7 @@
                             implementation =
                                 {
                                     init =
-                                        { resources , self } :
+                                        { resources , self , stores } :
                                             let
                                                 application =
                                                     writeShellApplication
@@ -40,7 +40,8 @@
                                             failure ,
                                             mkDerivation ,
                                             resources ? null ,
-                                            self ? null
+                                            self ? null ,
+                                            stores ? null
                                         } :
                                             mkDerivation
                                                 {
@@ -83,7 +84,7 @@
                                                                         runtimeInputs = [ coreutils ( failure.implementation "9507ef9d" ) ] ;
                                                                         text =
                                                                             let
-                                                                                observed = builtins.toString ( implementation.init { resources = resources ; self = self ; } ) ;
+                                                                                observed = builtins.toString ( implementation.init { resources = resources ; self = self ; stores = stores ; } ) ;
                                                                             in
                                                                                 if expected == observed then
                                                                                     ''
