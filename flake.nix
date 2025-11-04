@@ -68,9 +68,9 @@
                                                                                     ''
                                                                                         OUT="$1"
                                                                                         touch "$OUT"
-                                                                                        ${ if [ "init" "targets" ] != builtins.attrNames instance then ''failure 0d792ffc "We expected the names to be init targets but we observed ${ builtins.toJSON ( builtins.attrNames instance ) }"'' else "#" }
-                                                                                        ${ if expected != init then ''failure b2ba9748 "We expected the init to be ${ builtins.toString expected } but we observed ${ builtins.toString init }"'' else "#" }
-                                                                                        ${ if [ "dot-gnupg" ] != instance.targets then ''failure 63d0da9f "We expected the targets to be dot-gnupg but we observed ${ builtins.toJSON instance.targets }"'' else "#" }
+                                                                                        ${ if [ "init" "targets" ] != builtins.attrNames instance then ''failure 0d792ffc "We expected the dot-gnupg names to be init targets but we observed ${ builtins.toJSON ( builtins.attrNames instance ) }"'' else "#" }
+                                                                                        ${ if expected != init then ''failure b2ba9748 "We expected the dot-gnupg init to be ${ builtins.toString expected } but we observed ${ builtins.toString init }"'' else "#" }
+                                                                                        ${ if [ "dot-gnupg" ] != instance.targets then ''failure 63d0da9f "We expected the dot-gnupg targets to be dot-gnupg but we observed ${ builtins.toJSON instance.targets }"'' else "#" }
                                                                                     '' ;
                                                                     }
                                                             )
