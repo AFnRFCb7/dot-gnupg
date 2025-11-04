@@ -63,7 +63,7 @@
                                                                         text =
                                                                             let
                                                                                 init = instance.init { pkgs = pkgs ; resources = resources ; self = self ; } ;
-                                                                                instance = implementation { ownertrust-fun = ownertrust ; secret-keys-fun = secret-keys ; } ;
+                                                                                instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                 in
                                                                                     ''
                                                                                         OUT="$1"
