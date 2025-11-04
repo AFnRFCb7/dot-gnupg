@@ -40,10 +40,10 @@
                                         {
                                             expected ,
                                             failure ,
-                                            ownertrust ,
+                                            ownertrust-fun ,
                                             pkgs ,
                                             resources ? null ,
-                                            secret-keys ,
+                                            secret-keys-fun ,
                                             self ? null
                                         } :
                                             pkgs.stdenv.mkDerivation
@@ -63,7 +63,7 @@
                                                                         text =
                                                                             let
                                                                                 init = instance.init { pkgs = pkgs ; resources = resources ; self = self ; } ;
-                                                                                instance = implementation { ownertrust = ownertrust ; secret-keys = secret-keys ; } ;
+                                                                                instance = implementation { ownertrust-fun = ownertrust ; secret-keys-fun = secret-keys ; } ;
                                                                                 in
                                                                                     ''
                                                                                         OUT="$1"
