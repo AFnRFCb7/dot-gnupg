@@ -36,7 +36,9 @@
                                 {
                                     check =
                                         {
+                                            encrypted ,
                                             expected ,
+                                            identity ,
                                             failure ,
                                             pkgs ,
                                             resources ? null ,
