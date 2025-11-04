@@ -36,13 +36,13 @@
                                 {
                                     check =
                                         {
-                                            encrypted ,
                                             expected ,
-                                            identity ,
                                             failure ,
+                                            ownertrust ,
                                             pkgs ,
                                             resources ? null ,
-                                            self ? null ,
+                                            secret-keys ,
+                                            self ? null
                                         } :
                                             pkgs.stdenv.mkDerivation
                                                 {
@@ -61,7 +61,7 @@
                                                                         text =
                                                                             let
                                                                                 init = implementation.init { pkgs = pkgs ; resources = resources ; self = self ; } ;
-                                                                                instance = implementation { encrypted = encrypted ; identity = identity ; } ;
+                                                                                instance = implementation { ownertrust = ownertrust ; secret-keys = secret-keys ; } ;
                                                                                 in
                                                                                     ''
                                                                                         OUT="$1"
