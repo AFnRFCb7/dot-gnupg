@@ -30,7 +30,7 @@
                                                                 '' ;
                                                         } ;
                                                 ownertrust = ownertrust-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
-                                                secret-keys = ownertrust-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
+                                                secret-keys = secret-keys-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
                                                 in "${ application }/bin/init" ;
                                     targets = [ "dot-gnupg" ] ;
                                 } ;
