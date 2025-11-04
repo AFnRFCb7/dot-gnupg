@@ -6,7 +6,7 @@
                 lib =
                     let
                         implementation =
-                            { ownertrust , secret-keys } :
+                            { ownertrust-fun , secret-keys-fun } :
                                 {
                                     init =
                                         { pkgs , resources , self } :
@@ -29,6 +29,8 @@
                                                                     gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                 '' ;
                                                         } ;
+                                                ownertrust = ownertrust-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
+                                                secret-keys = ownertrust-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
                                                 in "${ application }/bin/init" ;
                                     targets = [ "dot-gnupg" ] ;
                                 } ;
