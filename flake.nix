@@ -4,18 +4,18 @@
         { self } :
             {
                 lib =
-                    { coreutils , ownertrust , secret-keys , writeShellApplication } :
-                        let
-                            implementation =
+                    let
+                        implementation =
+                            { ownertrust , secret-keys } :
                                 {
                                     init =
                                         { pkgs , resources , self } :
                                             let
                                                 application =
-                                                    writeShellApplication
+                                                    pkgs.writeShellApplication
                                                         {
                                                             name = "init" ;
-                                                            runtimeInputs = [ coreutils ] ;
+                                                            runtimeInputs = [ pkgs.coreutils ] ;
                                                             text =
                                                                 ''
                                                                     GNUPGHOME=/mount/dot-gnupg
@@ -38,88 +38,36 @@
                                         {
                                             expected ,
                                             failure ,
-                                            mkDerivation ,
-                                            pkgs ? null ,
+                                            pkgs ,
                                             resources ? null ,
                                             self ? null ,
                                         } :
-                                            mkDerivation
+                                            pkgs.stdenv.mkDerivation
                                                 {
                                                     installPhase =
                                                         ''
-                                                            execute-test-attributes "$out"
-                                                            execute-test-init "$out"
-                                                            execute-test-targets "$out"
+                                                            execute-test "$out"
                                                         '' ;
                                                     name = "check" ;
                                                     nativeBuildInputs =
                                                         [
                                                             (
-                                                                writeShellApplication
+                                                                pkgs.writeShellApplication
                                                                     {
-                                                                        name = "execute-test-attributes" ;
-                                                                        runtimeInputs = [ coreutils ( failure.implementation "4187683d" ) ] ;
+                                                                        name = "execute-test" ;
+                                                                        runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                         text =
                                                                             let
-                                                                                observed = builtins.attrNames implementation ;
+                                                                                init = implementation.init { pkgs = pkgs ; resources = resources ; self = self ; } ;
+                                                                                instance = implementation { encrypted = encrypted ; identity = identity ; } ;
                                                                                 in
-                                                                                    if [ "init" "targets" ] == observed
-                                                                                    then
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            touch "$OUT"
-                                                                                        ''
-                                                                                    else
-                                                                                        ''
-                                                                                            OUT=$1
-                                                                                            touch "$OUT"
-                                                                                            failure attributes
-                                                                                        '' ;
-                                                                    }
-                                                            )
-                                                            (
-                                                                writeShellApplication
-                                                                    {
-                                                                        name = "execute-test-init" ;
-                                                                        runtimeInputs = [ coreutils ( failure.implementation "9507ef9d" ) ] ;
-                                                                        text =
-                                                                            let
-                                                                                observed = builtins.toString ( implementation.init { pkgs = pkgs ; resources = resources ; self = self ; } ) ;
-                                                                            in
-                                                                                if expected == observed then
                                                                                     ''
                                                                                         OUT="$1"
                                                                                         touch "$OUT"
-                                                                                    ''
-                                                                                else
-                                                                                    ''
-                                                                                        OUT="$1"
-                                                                                        touch "$OUT"
-                                                                                        failure init "We expected ${ expected } but we observed ${ observed }"
+                                                                                        ${ if [ "init" "targets" ] != builtins.attrNames instance then ''failure 0d792ffc "We expected the names to be init targets but we observed ${ builtins.toJSON ( builtins.attrNames instance ) }"'' else "#" }
+                                                                                        ${ if expected != init then ''failure b2ba9748 "We expected the init to be ${ builtins.toString expected } but we observed ${ builtins.toString init }"'' else "#" }
+                                                                                        ${ if [ "dot-gnupg" ] != instance.targets then ''failure 63d0da9f "We expected the targets to be dot-gnupg but we observed ${ builtins.toJSON instance.targets }"'' else "#" }
                                                                                     '' ;
-                                                                    }
-                                                            )
-                                                            (
-                                                                writeShellApplication
-                                                                    {
-                                                                        name = "execute-test-targets" ;
-                                                                        runtimeInputs = [ coreutils ( failure.implementation "8eadd518" ) ] ;
-                                                                        text =
-                                                                            let
-                                                                                observed = implementation.targets ;
-                                                                                in
-                                                                                    if [ "dot-gnupg" ] == observed
-                                                                                    then
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            touch "$OUT"
-                                                                                        ''
-                                                                                    else
-                                                                                        ''
-                                                                                            OUT=$1
-                                                                                            touch "$OUT"
-                                                                                            failure targets
-                                                                                        '' ;
                                                                     }
                                                             )
                                                         ] ;
