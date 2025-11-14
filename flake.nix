@@ -10,7 +10,7 @@
                                 { ownertrust-fun , secret-keys-fun } :
                                     {
                                         init =
-                                            { pkgs , resources , self } :
+                                            { mounts , pkgs , resources , stage } :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -42,10 +42,11 @@
                                                 expected ,
                                                 failure ,
                                                 ownertrust-fun ,
+                                                mount ? null ,
                                                 pkgs ,
                                                 resources ? null ,
                                                 secret-keys-fun ,
-                                                self ? null
+                                                stage ? null
                                             } :
                                                 pkgs.stdenv.mkDerivation
                                                     {
@@ -63,7 +64,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { pkgs = pkgs ; resources = resources ; self = self ; } ;
+                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; stage = stage ; } ;
                                                                                     instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                     in
                                                                                         ''
