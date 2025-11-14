@@ -30,8 +30,8 @@
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
-                                                    ownertrust = ownertrust-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
-                                                    secret-keys = secret-keys-fun { pkgs = pkgs ; resources = resources ; self = self ; } ;
+                                                    ownertrust = ownertrust-fun { mount = mount ; pkgs = pkgs ; resources = resources ; stage = stage ; } ;
+                                                    secret-keys = secret-keys-fun { mount = mount ; pkgs = pkgs ; resources = resources ; stage = stage ; } ;
                                                     in "${ application }/bin/init" ;
                                         targets = [ "dot-gnupg" ] ;
                                     } ;
