@@ -10,7 +10,7 @@
                                 { ownertrust-fun , secret-keys-fun } :
                                     {
                                         init =
-                                            { mount , pkgs , resources , stage } :
+                                            { mount , pkgs , resources } :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -45,8 +45,7 @@
                                                 mount ? null ,
                                                 pkgs ,
                                                 resources ? null ,
-                                                secret-keys-fun ,
-                                                stage ? null
+                                                secret-keys-fun
                                             } :
                                                 pkgs.stdenv.mkDerivation
                                                     {
@@ -64,7 +63,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; stage = stage ; } ;
+                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; } ;
                                                                                     instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                     in
                                                                                         ''
