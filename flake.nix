@@ -10,7 +10,7 @@
                                 { ownertrust-fun , secret-keys-fun } :
                                     {
                                         init =
-                                            { mount , pkgs , resources } :
+                                            { mount , pkgs , resources , wrap } :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
