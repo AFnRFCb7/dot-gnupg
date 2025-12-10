@@ -64,7 +64,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap } ;
+                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap ; } ;
                                                                                     instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                     in
                                                                                         ''
