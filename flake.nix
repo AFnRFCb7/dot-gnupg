@@ -10,7 +10,7 @@
                                 { ownertrust-fun , secret-keys-fun } :
                                     {
                                         init =
-                                            { mount , pkgs , resources , wrap } :
+                                            { mount , pkgs , resources , root , wrap } :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -45,6 +45,7 @@
                                                 mount ? "71b99bab" ,
                                                 pkgs ,
                                                 resources ? "6fa37851" ,
+                                                root ? "69e95c47" ,
                                                 secret-keys-fun ,
                                                 wrap ? "91db4565"
                                             } :
@@ -64,7 +65,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap ; } ;
+                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
                                                                                     instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                     in
                                                                                         ''
