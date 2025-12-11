@@ -10,7 +10,7 @@
                                 { ownertrust-fun , secret-keys-fun } :
                                     {
                                         init =
-                                            { mount , pkgs , resources } :
+                                            { mount , pkgs , resources , wrap } :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -30,8 +30,8 @@
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
-                                                    ownertrust = ownertrust-fun { mount = mount ; pkgs = pkgs ; resources = resources ; } ;
-                                                    secret-keys = secret-keys-fun { mount = mount ; pkgs = pkgs ; resources = resources ; } ;
+                                                    ownertrust = ownertrust-fun { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap ; } ;
+                                                    secret-keys = secret-keys-fun { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap ; } ;
                                                     in "${ application }/bin/init" ;
                                         targets = [ "dot-gnupg" ] ;
                                     } ;
@@ -39,13 +39,14 @@
                                     {
                                         check =
                                             {
-                                                expected ,
+                                                expected ? "bf5be072" ,
                                                 failure ,
                                                 ownertrust-fun ,
-                                                mount ? null ,
+                                                mount ? "71b99bab" ,
                                                 pkgs ,
-                                                resources ? null ,
-                                                secret-keys-fun
+                                                resources ? "6fa37851" ,
+                                                secret-keys-fun ,
+                                                wrap ? "91db4565"
                                             } :
                                                 pkgs.stdenv.mkDerivation
                                                     {
@@ -63,7 +64,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; } ;
+                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; wrap = wrap ; } ;
                                                                                     instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
                                                                                     in
                                                                                         ''
