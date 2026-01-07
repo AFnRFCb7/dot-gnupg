@@ -24,7 +24,7 @@
                                                                             pkgs.writeShellApplication
                                                                                 {
                                                                                     name = "setup" ;
-                                                                                    runtimeInputs = [ wrap ]
+                                                                                    runtimeInputs = [ wrap ] ;
                                                                                     text = setup ;
                                                                                 }
                                                                         )
