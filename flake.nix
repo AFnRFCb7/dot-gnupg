@@ -24,7 +24,7 @@
                                                                             pkgs.writeShellApplication
                                                                                 {
                                                                                     name = "setup" ;
-                                                                                    runtimeInputs = [ wrap ] ;
+                                                                                    runtimeInputs = [ pkgs.coreutils ] ;
                                                                                     text = setup ;
                                                                                 }
                                                                         )
@@ -33,7 +33,10 @@
                                                                     ''
                                                                         SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
                                                                         OWNERTRUST=${ ownertrust primary ( setup : setup ) }
-                                                                        setup "$SECRET_KEYS" "$OWNERTRUST" | read -r SECRET_KEYS_FILE OWNERTRUST_FILE
+                                                                        {
+                                                                            read -r SECRET_KEYS_FILE
+                                                                            read -r OWNERTRUST_FILE
+                                                                        } < <( setup "$SECRET_KEYS" "$OWNERTRUST" )
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
