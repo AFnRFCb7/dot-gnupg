@@ -7,7 +7,7 @@
                     { } :
                         let
                             implementation =
-                                { ownertrust-fun , secret-keys-fun } :
+                                { ownertrust , secret-keys , setup } :
                                     {
                                         init =
                                             { mount , pkgs , resources , root , wrap } :
@@ -16,24 +16,38 @@
                                                         pkgs.writeShellApplication
                                                             {
                                                                 name = "init" ;
-                                                                runtimeInputs = [ pkgs.coreutils pkgs.gnupg ] ;
+                                                                runtimeInputs =
+                                                                    [
+                                                                        pkgs.coreutils
+                                                                        pkgs.gnupg
+                                                                        (
+                                                                            pkgs.writeShellApplication
+                                                                                {
+                                                                                    name = "setup" ;
+                                                                                    runtimeInputs = [ wrap ]
+                                                                                    text = setup ;
+                                                                                }
+                                                                        )
+                                                                    ] ;
                                                                 text =
                                                                     ''
+                                                                        mkdir --parents /mount/stage
+                                                                        SECRET_KEYS=${ secret-keys ( setup : setup ) }
+                                                                        OWNERTRUST=${ ownertrust ( setup : setup ) }
+                                                                        setup "$SECRET_KEYS" "$OWNERTRUST"
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
                                                                         chmod 0700 "$GNUPGHOME"
-                                                                        SECRET_KEYS=${ secret-keys ( setup : setup ) }
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS" 2>&1
-                                                                        OWNERTRUST=${ ownertrust ( setup : setup ) }
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST" 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import /mount/secret-keys.asc 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust /mount/ownertrust.asc 2>&1
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
                                                     ownertrust = ownertrust-fun { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
                                                     secret-keys = secret-keys-fun { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
                                                     in "${ application }/bin/init" ;
-                                        targets = [ "dot-gnupg" ] ;
+                                        targets = [ "dot-gnupg" "stage" ] ;
                                     } ;
                                 in
                                     {
@@ -41,12 +55,13 @@
                                             {
                                                 expected ? "bf5be072" ,
                                                 failure ,
-                                                ownertrust-fun ,
+                                                ownertrust ,
                                                 mount ? "71b99bab" ,
                                                 pkgs ,
                                                 resources ? "6fa37851" ,
                                                 root ? "69e95c47" ,
-                                                secret-keys-fun ,
+                                                secret-keys ,
+                                                setup ? "6300cec1" ,
                                                 wrap ? "91db4565"
                                             } :
                                                 pkgs.stdenv.mkDerivation
@@ -66,7 +81,7 @@
                                                                             text =
                                                                                 let
                                                                                     init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
-                                                                                    instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
+                                                                                    instance = implementation { ownertrust = ownertrust ; secret-keys = secret-keys ; setup = setup ; } ;
                                                                                     in
                                                                                         ''
                                                                                             OUT="$1"
