@@ -32,8 +32,8 @@
                                                                 text =
                                                                     ''
                                                                         mkdir --parents /mount/stage
-                                                                        SECRET_KEYS=${ secret-keys ( setup : setup ) }
-                                                                        OWNERTRUST=${ ownertrust ( setup : setup ) }
+                                                                        SECRET_KEYS=${ secret-keys }
+                                                                        OWNERTRUST=${ ownertrust }
                                                                         setup "$SECRET_KEYS" "$OWNERTRUST"
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
