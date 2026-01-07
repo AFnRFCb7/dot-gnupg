@@ -33,7 +33,7 @@
                                                                     ''
                                                                         SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
                                                                         OWNERTRUST=${ ownertrust primary ( setup : setup ) }
-                                                                        setup "$SECRET_KEYS" "$OWNERTRUST" | while read -r SECRET_KEYS_FILE OWNERTRUST_FILE
+                                                                        setup "$SECRET_KEYS" "$OWNERTRUST" | read -r SECRET_KEYS_FILE OWNERTRUST_FILE
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
