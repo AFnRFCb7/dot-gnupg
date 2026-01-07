@@ -7,7 +7,7 @@
                     { } :
                         let
                             implementation =
-                                { ownertrust , secret-keys , setup } :
+                                { ownertrust , ownertrust-file , secret-keys , secret-keys-file } :
                                     {
                                         init =
                                             { mount , pkgs , resources , root , wrap } @primary :
@@ -23,20 +23,26 @@
                                                                         (
                                                                             pkgs.writeShellApplication
                                                                                 {
-                                                                                    name = "setup" ;
+                                                                                    name = "ownertrust-program" ;
                                                                                     runtimeInputs = [ pkgs.coreutils ] ;
-                                                                                    text = setup ;
+                                                                                    text = ownertrust-file ;
+                                                                                }
+                                                                        )
+                                                                        (
+                                                                            pkgs.writeShellApplication
+                                                                                {
+                                                                                    name = "secret-keys-program" ;
+                                                                                    runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                    text = secret-keys-file ;
                                                                                 }
                                                                         )
                                                                     ] ;
                                                                 text =
                                                                     ''
                                                                         SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
+                                                                        SECRET_KEYS_FILE="$( secret-keys-program "$SECRET_KEYS" )" || failure 4a6ea680
                                                                         OWNERTRUST=${ ownertrust primary ( setup : setup ) }
-                                                                        {
-                                                                            read -r SECRET_KEYS_FILE
-                                                                            read -r OWNERTRUST_FILE
-                                                                        } < <( setup "$SECRET_KEYS" "$OWNERTRUST" )
+                                                                        OWNERTRUST_FILE="$( ownertrust-program "$OWNERTRUST" )" || failure 5751796b
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
@@ -47,7 +53,7 @@
                                                                     '' ;
                                                             } ;
                                                     in "${ application }/bin/init" ;
-                                        targets = [ "dot-gnupg" "stage" ] ;
+                                        targets = [ "dot-gnupg" ] ;
                                     } ;
                                 in
                                     {
