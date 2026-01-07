@@ -7,10 +7,10 @@
                     { } :
                         let
                             implementation =
-                                { ownertrust , secret-keys , setup } @primary :
+                                { ownertrust , secret-keys , setup } :
                                     {
                                         init =
-                                            { mount , pkgs , resources , root , wrap } :
+                                            { mount , pkgs , resources , root , wrap } @primary :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -31,7 +31,6 @@
                                                                     ] ;
                                                                 text =
                                                                     ''
-                                                                        mkdir --parents /mount/stage
                                                                         SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
                                                                         OWNERTRUST=${ ownertrust primary ( setup : setup ) }
                                                                         setup "$SECRET_KEYS" "$OWNERTRUST"
@@ -39,8 +38,8 @@
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
                                                                         chmod 0700 "$GNUPGHOME"
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import /mount/secret-keys.asc 2>&1
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust /mount/ownertrust.asc 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import /scratch/secret-keys.asc 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust /scratch/ownertrust.asc 2>&1
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
