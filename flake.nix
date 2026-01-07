@@ -16,7 +16,7 @@
                                                         pkgs.writeShellApplication
                                                             {
                                                                 name = "init" ;
-                                                                runtimeInputs = [ pkgs.coreutils ] ;
+                                                                runtimeInputs = [ pkgs.coreutils pkgs.gnupg ] ;
                                                                 text =
                                                                     ''
                                                                         GNUPGHOME=/mount/dot-gnupg
