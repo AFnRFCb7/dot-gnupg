@@ -7,7 +7,7 @@
                     { } :
                         let
                             implementation =
-                                { ownertrust , secret-keys , setup } :
+                                { ownertrust , secret-keys , setup } @primary :
                                     {
                                         init =
                                             { mount , pkgs , resources , root , wrap } :
@@ -32,8 +32,8 @@
                                                                 text =
                                                                     ''
                                                                         mkdir --parents /mount/stage
-                                                                        SECRET_KEYS=${ secret-keys ( setup : setup ) }
-                                                                        OWNERTRUST=${ ownertrust ( setup : setup ) }
+                                                                        SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
+                                                                        OWNERTRUST=${ ownertrust primary ( setup : setup ) }
                                                                         setup "$SECRET_KEYS" "$OWNERTRUST"
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
