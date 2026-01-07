@@ -33,13 +33,13 @@
                                                                     ''
                                                                         SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
                                                                         OWNERTRUST=${ ownertrust primary ( setup : setup ) }
-                                                                        setup "$SECRET_KEYS" "$OWNERTRUST"
+                                                                        setup "$SECRET_KEYS" "$OWNERTRUST" | while read -r SECRET_KEYS_FILE OWNERTRUST_FILE
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
                                                                         chmod 0700 "$GNUPGHOME"
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import /scratch/secret-keys.asc 2>&1
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust /scratch/ownertrust.asc 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS_FILE" 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST_FILE" 2>&1
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
