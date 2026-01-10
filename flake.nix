@@ -1,3 +1,4 @@
+# 6d1a0db1
 {
     inputs = { } ;
     outputs =
@@ -7,31 +8,51 @@
                     { } :
                         let
                             implementation =
-                                { ownertrust-fun , secret-keys-fun } :
+                                { ownertrust , ownertrust-file , secret-keys , secret-keys-file } :
                                     {
                                         init =
-                                            { mount , pkgs , resources , root , wrap } :
+                                            { mount , pkgs , resources , root , wrap } @primary :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
                                                             {
                                                                 name = "init" ;
-                                                                runtimeInputs = [ pkgs.coreutils ] ;
+                                                                runtimeInputs =
+                                                                    [
+                                                                        pkgs.coreutils
+                                                                        pkgs.gnupg
+                                                                        (
+                                                                            pkgs.writeShellApplication
+                                                                                {
+                                                                                    name = "ownertrust-program" ;
+                                                                                    runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                    text = ownertrust-file ;
+                                                                                }
+                                                                        )
+                                                                        (
+                                                                            pkgs.writeShellApplication
+                                                                                {
+                                                                                    name = "secret-keys-program" ;
+                                                                                    runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                    text = secret-keys-file ;
+                                                                                }
+                                                                        )
+                                                                    ] ;
                                                                 text =
                                                                     ''
+                                                                        SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
+                                                                        SECRET_KEYS_FILE="$( secret-keys-program "$SECRET_KEYS" )" || failure 4a6ea680
+                                                                        OWNERTRUST=${ ownertrust primary ( setup : setup ) }
+                                                                        OWNERTRUST_FILE="$( ownertrust-program "$OWNERTRUST" )" || failure 5751796b
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
                                                                         mkdir --parents "$GNUPGHOME"
                                                                         chmod 0700 "$GNUPGHOME"
-                                                                        SECRET_KEYS=${ secret-keys ( setup : setup ) }
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS" 2>&1
-                                                                        OWNERTRUST=${ ownertrust ( setup : setup ) }
-                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST" 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import "$SECRET_KEYS_FILE" 2>&1
+                                                                        gpg --batch --yes --homedir "$GNUPGHOME" --import-ownertrust "$OWNERTRUST_FILE" 2>&1
                                                                         gpg --batch --yes --homedir "$GNUPGHOME" --update-trustdb 2>&1
                                                                     '' ;
                                                             } ;
-                                                    ownertrust = ownertrust-fun { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
-                                                    secret-keys = secret-keys-fun { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
                                                     in "${ application }/bin/init" ;
                                         targets = [ "dot-gnupg" ] ;
                                     } ;
@@ -41,12 +62,15 @@
                                             {
                                                 expected ? "bf5be072" ,
                                                 failure ,
-                                                ownertrust-fun ,
+                                                ownertrust ,
+                                                ownertrust-file ,
                                                 mount ? "71b99bab" ,
                                                 pkgs ,
                                                 resources ? "6fa37851" ,
                                                 root ? "69e95c47" ,
-                                                secret-keys-fun ,
+                                                secret-keys ,
+                                                secret-keys-file ,
+                                                setup ? "6300cec1" ,
                                                 wrap ? "91db4565"
                                             } :
                                                 pkgs.stdenv.mkDerivation
@@ -66,7 +90,7 @@
                                                                             text =
                                                                                 let
                                                                                     init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
-                                                                                    instance = implementation { ownertrust-fun = ownertrust-fun ; secret-keys-fun = secret-keys-fun ; } ;
+                                                                                    instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; } ;
                                                                                     in
                                                                                         ''
                                                                                             OUT="$1"
