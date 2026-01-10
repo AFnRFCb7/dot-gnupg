@@ -63,11 +63,13 @@
                                                 expected ? "bf5be072" ,
                                                 failure ,
                                                 ownertrust ,
+                                                ownertrust-file ,
                                                 mount ? "71b99bab" ,
                                                 pkgs ,
                                                 resources ? "6fa37851" ,
                                                 root ? "69e95c47" ,
                                                 secret-keys ,
+                                                secret-keys-file ,
                                                 setup ? "6300cec1" ,
                                                 wrap ? "91db4565"
                                             } :
@@ -88,7 +90,7 @@
                                                                             text =
                                                                                 let
                                                                                     init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
-                                                                                    instance = implementation { ownertrust = ownertrust ; secret-keys = secret-keys ; setup = setup ; } ;
+                                                                                    instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; setup = setup ; } ;
                                                                                     in
                                                                                         ''
                                                                                             OUT="$1"
