@@ -90,7 +90,7 @@
                                                                             text =
                                                                                 let
                                                                                     init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
-                                                                                    instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; setup = setup ; } ;
+                                                                                    instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; } ;
                                                                                     in
                                                                                         ''
                                                                                             OUT="$1"
