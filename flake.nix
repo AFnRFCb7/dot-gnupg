@@ -40,9 +40,9 @@
                                                                     ] ;
                                                                 text =
                                                                     ''
-                                                                        SECRET_KEYS=${ secret-keys primary ( setup : setup ) }
+                                                                        SECRET_KEYS=${ secret-keys primary { } }
                                                                         SECRET_KEYS_FILE="$( secret-keys-program "$SECRET_KEYS" )" || failure 4a6ea680
-                                                                        OWNERTRUST=${ ownertrust primary ( setup : setup ) }
+                                                                        OWNERTRUST=${ ownertrust primary { } }
                                                                         OWNERTRUST_FILE="$( ownertrust-program "$OWNERTRUST" )" || failure 5751796b
                                                                         GNUPGHOME=/mount/dot-gnupg
                                                                         export GNUPGHOME
