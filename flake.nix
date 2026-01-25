@@ -11,7 +11,7 @@
                                 { ownertrust , ownertrust-file , secret-keys , secret-keys-file } :
                                     {
                                         init =
-                                            { mount , pkgs , resources , root , wrap } @primary :
+                                            { pid , pkgs , resources , root , sequential , wrap } @primary :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -64,12 +64,13 @@
                                                 failure ,
                                                 ownertrust ,
                                                 ownertrust-file ,
-                                                mount ? "71b99bab" ,
+                                                pid ? "522d97db" ,
                                                 pkgs ,
                                                 resources ? "6fa37851" ,
                                                 root ? "69e95c47" ,
                                                 secret-keys ,
                                                 secret-keys-file ,
+                                                sequential ? "ba8348f6" ,
                                                 setup ? "6300cec1" ,
                                                 wrap ? "91db4565"
                                             } :
@@ -89,7 +90,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { mount = mount ; pkgs = pkgs ; resources = resources ; root = root ; wrap = wrap ; } ;
+                                                                                    init = instance.init { pid = pid ; pkgs = pkgs ; resources = resources ; root = root ; sequential = sequential ; wrap = wrap ; } ;
                                                                                     instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; } ;
                                                                                     in
                                                                                         ''
