@@ -11,7 +11,7 @@
                                 { ownertrust , ownertrust-file , secret-keys , secret-keys-file } :
                                     {
                                         init =
-                                            { failure , pid , pkgs , resources , root , sequential , wrap } @primary :
+                                            { failure , pid , pkgs , resources , root , sequential , seed , wrap } @primary :
                                                 let
                                                     application =
                                                         pkgs.writeShellApplication
@@ -70,6 +70,7 @@
                                                 root ? "69e95c47" ,
                                                 secret-keys ,
                                                 secret-keys-file ,
+                                                seed ? "2c828755" ,
                                                 sequential ? "ba8348f6" ,
                                                 setup ? "6300cec1" ,
                                                 wrap ? "91db4565"
@@ -90,7 +91,7 @@
                                                                             runtimeInputs = [ pkgs.coreutils failure ] ;
                                                                             text =
                                                                                 let
-                                                                                    init = instance.init { failure = failure ; pid = pid ; pkgs = pkgs ; resources = resources ; root = root ; sequential = sequential ; wrap = wrap ; } ;
+                                                                                    init = instance.init { failure = failure ; pid = pid ; pkgs = pkgs ; resources = resources ; root = root ; seed = seed ; sequential = sequential ; wrap = wrap ; } ;
                                                                                     instance = implementation { ownertrust = ownertrust ; ownertrust-file = ownertrust-file ; secret-keys = secret-keys ; secret-keys-file = secret-keys-file ; } ;
                                                                                     in
                                                                                         ''
